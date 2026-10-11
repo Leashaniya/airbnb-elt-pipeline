@@ -1,0 +1,21 @@
+name: airbnb
+version: "1.0.0"
+profile: airbnb
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: target
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  airbnb:
+    staging:
+      +schema: staging
+      +materialized: view        # light cleaning, always up to date, no storage cost
+    intermediate:
+      +schema: intermediate
+      +materialized: ephemeral   # helper logic, compiled into the models that use it
+    marts:
+      +schema: marts
+      +materialized: table       # final facts and dimensions, fast for reporting

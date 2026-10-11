@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'AIRBNB') }}"
+    schema: RAW
+    description: Raw Airbnb CSVs loaded from S3 with COPY INTO. Every column is text.
+    tables:
+      - name: listings
+        description: One row per listing, including host details (Seattle, Jan 2016 snapshot).
+        columns:
+          - name: id
+            data_tests: [unique, not_null]
+      - name: reviews
+        description: One row per guest review.
+        columns:
+          - name: id
+            data_tests: [unique, not_null]
+      - name: calendar
+        description: One row per listing per day for the next year, with availability and price.

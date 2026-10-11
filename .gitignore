@@ -1,0 +1,16 @@
+.env
+.venv/
+.tools/
+__pycache__/
+.DS_Store
+
+# Data is downloaded from Kaggle, not committed
+data/raw/*
+!data/raw/.gitkeep
+
+# dbt
+airbnb_dbt/target/
+airbnb_dbt/dbt_packages/
+airbnb_dbt/logs/
+logs/
+airbnb_dbt/.user.yml

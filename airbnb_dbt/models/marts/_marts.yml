@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: dim_hosts
+    description: One row per host.
+    columns:
+      - name: host_id
+        data_tests: [unique, not_null]
+
+  - name: dim_listings
+    description: One row per listing, with review and availability stats.
+    columns:
+      - name: listing_id
+        data_tests: [unique, not_null]
+      - name: host_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_hosts')
+                field: host_id
+      - name: price_per_night
+        data_tests: [not_null, positive_value]
+      - name: occupancy_rate
+        data_tests:
+          - accepted_range_0_1
+
+  - name: fct_reviews
+    description: One row per review (incremental).
+    columns:
+      - name: review_id
+        data_tests: [unique, not_null]
+      - name: listing_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_listings')
+                field: listing_id
+
+  - name: fct_listing_calendar
+    description: One row per listing per day.
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [listing_id, calendar_date]
+    columns:
+      - name: listing_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_listings')
+                field: listing_id
+      - name: price
+        data_tests: [positive_value]

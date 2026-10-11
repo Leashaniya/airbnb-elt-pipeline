@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_listings
+    description: Cleaned listings, one row per listing.
+    columns:
+      - name: listing_id
+        data_tests: [unique, not_null]
+      - name: host_id
+        data_tests: [not_null]
+      - name: room_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["Entire home/apt", "Private room", "Shared room"]
+      - name: price_per_night
+        data_tests: [not_null]
+
+  - name: stg_hosts
+    description: Cleaned hosts, one row per host.
+    columns:
+      - name: host_id
+        data_tests: [unique, not_null]
+
+  - name: stg_reviews
+    description: Cleaned reviews, one row per review.
+    columns:
+      - name: review_id
+        data_tests: [unique, not_null]
+      - name: review_date
+        data_tests: [not_null]
+
+  - name: stg_calendar
+    description: Cleaned daily availability and price per listing.
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [listing_id, calendar_date]
